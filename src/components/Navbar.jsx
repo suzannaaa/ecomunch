@@ -20,10 +20,10 @@ export default function Navbar() {
     }, [darkMode]);
 
     return (
-        <nav className="bg-lime-100 dark:bg-gray-800 text-gray-800 dark:text-white shadow sticky top-0 z-50">
+        <nav className="bg-lime-100 dark:bg-emerald-950 text-gray-800 dark:text-white shadow sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
                 {/* Logo */}
-                <Link to="/" className="flex items-center space-x-2 font-bold text-xl text-lime-600">
+                <Link to="/" className="flex items-center space-x-2 font-bold text-xl text-lime-600 dark:text-lime-500">
                     <img src={logo} alt="Ecomunch Logo" className="w-8 h-8 object-contain" />
                     <span>EcoMunch</span>
                 </Link>

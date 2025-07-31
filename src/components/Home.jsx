@@ -68,14 +68,14 @@ export default function Home() {
                 ref={leftScrollRef}
                 className="w-full h-1/4 md:w-[30%] md:h-full overflow-x-auto md:overflow-y-auto scrollbar-hide z-0 
                 bg-gradient-to-bl from-orange-400 via-amber-500 to-yellow-400
-                dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-black 
+                dark:bg-gradient-to-br dark:from-yellow-500 dark:via-amber-700 dark:to-orange-900 
                 shadow-inner p-4"
             >
                 <div className="flex md:items-center md:flex-col space-x-4 md:space-x-0 md:space-y-10 min-w-max">
                     {Array.from({ length: 5 }).map((_, i) => (
                         <div
                             key={i}
-                            className="min-w-[10rem] max-w-[20rem] h-32 md:h-80 md:w-full bg-amber-200 text-amber-600 font-medium rounded-lg shadow-md flex items-center justify-center"
+                            className="min-w-[10rem] max-w-[20rem] h-32 md:h-80 md:w-full bg-amber-200 text-amber-600 dark:bg-amber-950 dark:text-amber-400 font-medium rounded-lg shadow-md flex items-center justify-center"
                         >
                             ITEM {i + 1}
                         </div>
@@ -88,7 +88,7 @@ export default function Home() {
                 {/* Background */}
                 <div className="absolute inset-0 
                 bg-gradient-to-br from-amber-300 via-lime-200 to-lime-300
-                dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-black 
+                dark:bg-gradient-to-br dark:from-lime-200 dark:via-green-700 dark:to-emerald-200 
                 shadow-inner z-0" />
 
                 {/* Heading */}
@@ -112,8 +112,9 @@ export default function Home() {
                 <button
                     onClick={handleButtonClick}
                     className="absolute z-20 md:top-3/4 top-3/4 left-1/2 md:left-2/3 text-lg md:text-2xl font-bold text-yellow-900 dark:text-yellow-100 
-                    bg-gradient-to-br from-purple-300/50 via-orange-200/50 to-amber-300/50 dark:from-gray-800 dark:via-gray-900 dark:to-black
-                    py-4 px-6 border border-amber-200 rounded-full shadow-lg 
+                    bg-gradient-to-br from-purple-300/50 via-orange-200/50 to-amber-300/50
+                    dark:from-fuchsia-800/75 dark:via-purple-800/75 dark:to-violet-700/75
+                    ml-4 md:ml-0 py-2 px-4 md:py-4 md:px-6 border border-amber-200 rounded-full shadow-lg 
                     transition-all duration-300 ease-in-out 
                     hover:ring-4 hover:ring-amber-200 dark:hover:ring-yellow-400 hover:scale-105"
                 >
