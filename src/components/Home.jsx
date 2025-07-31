@@ -1,12 +1,21 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
+import { useInView } from 'react-intersection-observer';
+import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import logo from '../assets/ecomunch logo (transparent).png';
 
-function MyModel() {
-    const { scene } = useGLTF("/ecomunch/spoon(long).glb");
+function SmallSpoonModel() {
+    const { scene } = useGLTF('/ecomunch/spoon.glb');
+    return <primitive object={scene} />;
+}
+
+function SpoonModel() {
+    const gltf = useGLTF("/ecomunch/spoon(long).glb");
     const ref = useRef();
+
+    const clonedScene = useMemo(() => clone(gltf.scene), [gltf.scene]);
 
     useFrame(() => {
         if (ref.current) {
@@ -14,8 +23,80 @@ function MyModel() {
         }
     });
 
-    // Z, X, Y
-    return <primitive object={scene} rotation={[Math.PI / -6, 0, Math.PI / 1.25]} />;
+    return (
+        <primitive
+            // ref={ref}
+            object={clonedScene}
+            // Z, X, Y
+            position={[0, 0, 0]}
+            rotation={[Math.PI / -6, 0, Math.PI / 1.25]}
+        />
+    );
+}
+
+function ZiplockModel() {
+    const gltf = useGLTF("/ecomunch/ziplock.glb");
+
+    const clonedScene = useMemo(() => clone(gltf.scene), [gltf.scene]);
+
+    return (
+        <primitive
+            object={clonedScene}
+            // Z, X, Y
+            position={[0, 0, -10]}
+            rotation={[0, Math.PI / -1, 0]}
+        />
+    );
+}
+
+function ModelCanvas({ type }) {
+    let ModelComponent;
+
+    switch (type) {
+        case "ziplock":
+            ModelComponent = ZiplockModel;
+            break;
+        case "spoon":
+            ModelComponent = SpoonModel;
+            break;
+        case "smallspoon":
+            ModelComponent = SmallSpoonModel;
+            break;
+        default:
+            return <div>Invalid model type</div>;
+    }
+
+    return (
+        <Canvas
+            camera={{ position: [0, 0, 10], fov: 45 }}
+            gl={{ alpha: true }}
+            style={{ width: "100%", height: "100%", background: "transparent" }}
+        >
+            <ambientLight intensity={0.3} />
+            <directionalLight position={[5, 5, 5]} intensity={0.5} />
+            <Environment preset="sunset" background={false} />
+            <ModelComponent />
+        </Canvas>
+    );
+}
+
+const models = ["ziplock", "spoon", "ziplock", "smallspoon"];
+const duplicatedModels = [...models, ...models];
+
+function LazyItem({ type }) {
+    const { ref, inView } = useInView({
+        triggerOnce: true,
+        threshold: 0.3,
+    });
+
+    return (
+        <div
+            ref={ref}
+            className="relative max-w-[10rem] md:max-w-[20rem] h-32 md:h-80 md:w-full bg-amber-200 dark:bg-amber-950 rounded-lg shadow-md flex items-center justify-center"
+        >
+            {inView ? <ModelCanvas type={type} /> : <p className="text-white text-sm">Loading...</p>}
+        </div>
+    );
 }
 
 export default function Home() {
@@ -30,7 +111,7 @@ export default function Home() {
         const scroll = () => {
             if (window.innerWidth < 768) {
                 el.scrollLeft += 1;
-                if (el.scrollLeft >= el.scrollWidth - el.clientWidth) {
+                if (el.scrollLeft >= el.scrollWidth / 2) {
                     el.scrollLeft = 0;
                 }
             } else {
@@ -41,8 +122,8 @@ export default function Home() {
 
                 // Scroll Down
                 el.scrollTop -= 1;
-                if (el.scrollTop <= 0) {
-                    el.scrollTop = el.scrollHeight;
+                if (el.scrollTop <= el.scrollHeight / 2 - el.clientHeight) {
+                    el.scrollTop = el.scrollHeight / 2;
                 }
             }
         };
@@ -72,13 +153,8 @@ export default function Home() {
                 shadow-inner p-4"
             >
                 <div className="flex md:items-center md:flex-col space-x-4 md:space-x-0 md:space-y-10 min-w-max">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                        <div
-                            key={i}
-                            className="min-w-[10rem] max-w-[20rem] h-32 md:h-80 md:w-full bg-amber-200 text-amber-600 dark:bg-amber-950 dark:text-amber-400 font-medium rounded-lg shadow-md flex items-center justify-center"
-                        >
-                            ITEM {i + 1}
-                        </div>
+                    {duplicatedModels.map((modelType, i) => (
+                        <LazyItem key={i} type={modelType} />
                     ))}
                 </div>
             </div>
@@ -121,18 +197,30 @@ export default function Home() {
                     Learn More
                 </button>
 
-
-                {/* 3D Canvas */}
+                {/* Spoon 3D Canvas */}
                 <Canvas
                     className="absolute top-1/3 left-1/2 w-full max-w-[600px] h-[60vh] transform -translate-x-1/2 -translate-y-1/4 z-10"
                     camera={{ position: [0, 0, 10], fov: 45 }}
+                    gl={{ alpha: true }}
                 >
                     <ambientLight intensity={0.5} />
                     <directionalLight position={[5, 5, 5]} intensity={1} />
                     <Environment preset="sunset" background={false} />
-                    <MyModel />
+                    <SpoonModel />
                     <OrbitControls enableZoom={false} enablePan={false} target={[0, -0.5, 0]} />
                 </Canvas>
+
+                {/* Ziplock 3D Canvas */}
+                {/* <Canvas
+                    className="absolute top-1/3 left-3/4 w-full max-w-[500px] h-[50vh] transform -translate-x-1/2 -translate-y-1/4 z-0 pointer-events-none"
+                    camera={{ position: [0, 0, 30], fov: 45 }}
+                    gl={{ alpha: true }}
+                >
+                    <ambientLight intensity={0.3} />
+                    <directionalLight position={[5, 5, 5]} intensity={0.5} />
+                    <Environment preset="sunset" background={false} />
+                    <ZiplockModel />
+                </Canvas> */}
             </div>
         </div>
     );
