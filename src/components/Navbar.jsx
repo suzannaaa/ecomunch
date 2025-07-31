@@ -40,7 +40,7 @@ export default function Navbar() {
                     {/* Default Navbar */}
                     <div className="hidden md:flex space-x-4 text-sm font-medium">
                         <Link to="/about" className="hover:text-lime-600">About Us</Link>
-                        <Link to="/products" className="hover:text-lime-600">Our Products</Link>
+                        {/* <Link to="/products" className="hover:text-lime-600">Our Products</Link> */}
                     </div>
 
                     {/* Hamburger */}
@@ -58,7 +58,7 @@ export default function Navbar() {
             {menuOpen && (
                 <div className="md:hidden flex flex-col items-start px-4 pb-4 space-y-2 text-sm font-medium">
                     <Link to="/about" className="hover:text-lime-600">About Us</Link>
-                    <Link to="/products" className="hover:text-lime-600">Our Products</Link>
+                    {/* <Link to="/products" className="hover:text-lime-600">Our Products</Link> */}
                 </div>
             )}
         </nav>

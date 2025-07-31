@@ -211,7 +211,7 @@ export default function Home() {
                 </Canvas>
 
                 {/* Ziplock 3D Canvas */}
-                {/* <Canvas
+                <Canvas
                     className="absolute top-1/3 left-3/4 w-full max-w-[500px] h-[50vh] transform -translate-x-1/2 -translate-y-1/4 z-0 pointer-events-none"
                     camera={{ position: [0, 0, 30], fov: 45 }}
                     gl={{ alpha: true }}
@@ -220,7 +220,7 @@ export default function Home() {
                     <directionalLight position={[5, 5, 5]} intensity={0.5} />
                     <Environment preset="sunset" background={false} />
                     <ZiplockModel />
-                </Canvas> */}
+                </Canvas>
             </div>
         </div>
     );
